@@ -1,7 +1,8 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import axios from 'axios'
 
+import UserService from '../app/service/user-service'
+import LocalStorageService from '../app/service/localStorageService'
 
 class Home extends React.Component {
     
@@ -10,10 +11,17 @@ class Home extends React.Component {
         user : '{username}'
     }
 
+    constructor(){
+        super();
+        this.userService = new UserService();
+        
+    }
+
     componentDidMount(){
-        const loggedUserString = localStorage.getItem('_logged_user');
-        const loggedUser = JSON.parse(loggedUserString);
-        axios.get(`http://localhost:8080/api/users/${loggedUser.id}/balance`)
+        const loggedUser = LocalStorageService.getItem('_logged_user');
+
+        this.userService
+            .getBalanceByUserId(loggedUser.id)
             .then(res => {
                 this.setState({ balance : res.data });
                 this.setState({ user : loggedUser.name });

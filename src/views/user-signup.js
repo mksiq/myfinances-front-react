@@ -3,20 +3,72 @@ import Card from '../components/card'
 import FormGroup from '../components/form-group'
 import { withRouter } from 'react-router-dom'
 
+import UserService from '../app/service/user-service'
+import { successMessage, errorMessage } from '../components/toastr'
+
+
 class UserSignUp extends React.Component {
     state = {
         name: '',
         email: '',
         password: '',
-        cofirmPassword: ''
+        confirmPassword: ''
     }
 
-    signup() {
-        console.log(this.state);
+    constructor(){
+        super();
+        this.service = new UserService();
+    }
+
+    validate(){
+        const messages = [];
+        if(!this.state.name){
+            messages.push('You need to type a name.');
+        }
+        if(!this.state.email){
+            messages.push('You need to type an email.');
+        } else if (!this.state.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)){
+            messages.push('You need to type a valid email.');
+        }
+        if(!this.state.password){
+            messages.push('You need to type an password.');
+        }
+        if(!this.state.confirmPassword){
+            messages.push('You need to confirm your password.');
+        }
+        if(this.state.password !== this.state.confirmPassword ){
+            messages.push('Your password does not match.');
+        }
+
+        return messages;
+    }
+
+    signup = () => {
+        const messages = this.validate();
+        if(messages && messages.length > 0){
+            messages.forEach( (msg, index) => {
+                errorMessage(msg)
+            });
+            return false;
+        }
+        const user = {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password
+        }
+
+        this.service.insert(user)
+            .then( res  => {
+                successMessage('User registered. Login to enter');
+                this.props.history.push('/login');
+            }).catch( e => {
+                errorMessage(e.response.data);
+            });
+
     }
 
     cancel = () => {
-        this.props.history.push('/login')
+        this.props.history.push('/login');
     }
 
     render() {

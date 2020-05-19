@@ -8,6 +8,15 @@ class UserService extends ApiService{
     authenticate(credentials){
         return this.post('/authenticate', credentials);
     }
+
+    getBalanceByUserId(id){
+        return this.get(`/${id}/balance`)
+    }
+
+    insert(user){
+        return this.post('', user);
+    }
+
 }
 
 export default UserService;
