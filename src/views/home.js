@@ -2,7 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 
 import UserService from '../app/service/user-service'
-import LocalStorageService from '../app/service/localStorageService'
+import LocalStorageService from '../app/service/localstorage-service'
 
 class Home extends React.Component {
     

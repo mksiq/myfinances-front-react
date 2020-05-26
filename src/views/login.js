@@ -3,7 +3,7 @@ import Card from '../components/card'
 import FormGroup from '../components/form-group';
 import { withRouter } from 'react-router-dom'
 import UserService from '../app/service/user-service'
-import LocalStorageService from '../app/service/localStorageService'
+import LocalStorageService from '../app/service/localstorage-service'
 import { errorMessage } from '../components/toastr'
 
 

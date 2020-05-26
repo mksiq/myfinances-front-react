@@ -4,7 +4,7 @@ import { Route, Switch , HashRouter } from 'react-router-dom'
 import Home from '../views/home'
 import Login from '../views/login'
 import UserSignUp from '../views/user-signup'
-import SeachTransaction from '../views/search-transactions'
+import SeachTransaction from '../views/transactions/search-transactions'
 
 function Routes(){
     return(
