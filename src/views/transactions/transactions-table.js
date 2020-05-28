@@ -5,10 +5,17 @@ export default props => {
         return (
             <tr key={transaction.id}>
                 <td>{transaction.description}</td>
-                <td>{transaction.value}</td>
+                
+                <td>{ new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(transaction.value) }</td>
                 <td>{transaction.type}</td>
                 <td>{transaction.month}</td>
                 <td>{transaction.status}</td>
+                <td>
+                    <button type="button" className="btn btn-primary"
+                        onClick={ e => props.editAction(transaction.id )}>Edit</button>
+                    <button type="button" className="btn btn-danger"
+                        onClick={ e => props.deleteAction(transaction.id )}>Remove</button>
+                </td>
             </tr>
         );
     })

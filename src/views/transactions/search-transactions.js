@@ -8,63 +8,60 @@ import TransactionsTable from './transactions-table'
 import TransactionService from '../../app/service/transaction-service'
 import LocalStorageService from '../../app/service/localstorage-service'
 
+import * as messages from '../../components/toastr'
+
 class SearchTransactions extends React.Component {
 
     state = {
         year: '',
         month: '',
         type: '',
-        transactions : []
+        description: '',
+        transactions: []
 
     }
 
-    constructor(){
+    constructor() {
         super();
         this.service = new TransactionService();
     }
 
     select = () => {
+        if(!this.state.year){
+            messages.errorMessage("Please fill the Year field");
+            return false;
+        }
+
         const loggedUser = LocalStorageService.getItem('_logged_user');
-        
+
         const transactionFilter = {
             year: this.state.year,
             month: this.state.month,
             type: this.state.type,
+            description: this.state.description,
             user: loggedUser.id
         };
 
         this.service.select(transactionFilter)
-            .then( response => {
-                this.setState({ transactions: response.data});
-            }).catch( e => {
+            .then(response => {
+                this.setState({ transactions: response.data });
+            }).catch(e => {
                 console.log(e);
             })
     }
 
+    edit(id){
+        console.log("Editing: ", id);
+    }
+
+    delete(id){
+        console.log("Removing: ", id);
+    }
+
+
     render() {
-        const listOfMonths = [
-            { label: 'Select', value: '' },
-            { label: 'January', value: 1 },
-            { label: 'February', value: 2 },
-            { label: 'March', value: 3 },
-            { label: 'April', value: 4 },
-            { label: 'May', value: 5 },
-            { label: 'June', value: 6 },
-            { label: 'July', value: 7 },
-            { label: 'August', value: 8 },
-            { label: 'September', value: 9 },
-            { label: 'October', value: 10 },
-            { label: 'November', value: 11 },
-            { label: 'December', value: 12 },
-        ];
-
-        const listOfTypes = [
-            { label: 'Select', value: '' },
-            { label: 'Expense', value: 'EXPENSE' },
-            { label: 'Income', value: 'INCOME' }
-        ];
-
-
+        const listOfMonths = this.service.getMonthList();
+        const listOfTypes = this.service.getTypeList();
 
         return (
             <Card title="List of Transactions">
@@ -85,6 +82,14 @@ class SearchTransactions extends React.Component {
                                     onChange={event => this.setState({ month: event.target.value })}
                                     className="form-control" list={listOfMonths} />
                             </FormGroup>
+                            <FormGroup htmlFor="inputDescription" label="Description: ">
+                                <input type="text"
+                                    className="form-control"
+                                    id="inputDescription"
+                                    value={this.state.description}
+                                    onChange={event => this.setState({ description: event.target.value })}
+                                    placeholder="Insert Description" />
+                            </FormGroup>
                             <FormGroup htmlFor="inputType" label="Type of Transaction: ">
                                 <SelectMenu id="inputType"
                                     value={this.state.type}
@@ -100,7 +105,9 @@ class SearchTransactions extends React.Component {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="bs-component">
-                            <TransactionsTable transactions={this.state.transactions} />
+                            <TransactionsTable transactions={this.state.transactions}
+                                deleteAction={this.delete}
+                                editAction={this.edit}/>
                         </div>
                     </div>
                 </div>
