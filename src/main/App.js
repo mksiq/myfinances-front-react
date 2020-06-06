@@ -9,6 +9,11 @@ import 'toastr/build/toastr.min'
 import 'bootswatch/dist/superhero/bootstrap.css'
 import '../custom.css'
 
+import 'primereact/resources/themes/nova-dark/theme.css'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
+
+
 class App extends React.Component {
   render() {
     return (

@@ -32,6 +32,19 @@ export default class TransactionService extends ApiService {
         ];
     }
 
+    getById(id){
+       return this.get(`/${id}`);
+    }
+
+    insert(transaction){
+        return this.post('/',transaction)
+    }
+
+    update(transaction){
+
+        return this.put(`/${transaction.id}`,transaction)
+    }
+
     select(transactionFilter) {
         let params = `?year=${transactionFilter.year}`;
 
@@ -55,5 +68,9 @@ export default class TransactionService extends ApiService {
         }
 
         return this.get(params);
+    }
+
+    del(id){
+        return this.delete(`/${id}`);
     }
 }

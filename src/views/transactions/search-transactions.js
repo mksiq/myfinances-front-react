@@ -1,5 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import {Dialog} from 'primereact/dialog';
+import { Button } from 'primereact/button';
 import Card from '../../components/card'
 import FormGroup from '../../components/form-group'
 import SelectMenu from '../../components/select-menu'
@@ -10,6 +12,8 @@ import LocalStorageService from '../../app/service/localstorage-service'
 
 import * as messages from '../../components/toastr'
 
+
+
 class SearchTransactions extends React.Component {
 
     state = {
@@ -17,6 +21,8 @@ class SearchTransactions extends React.Component {
         month: '',
         type: '',
         description: '',
+        showConfirmDialog: false ,
+        transactionToDelete: {},
         transactions: []
 
     }
@@ -50,18 +56,45 @@ class SearchTransactions extends React.Component {
             })
     }
 
-    edit(id){
-        console.log("Editing: ", id);
+    edit = (id) => {
+        this.props.history.push(`/register-transactions/${id}`)
     }
 
-    delete(id){
-        console.log("Removing: ", id);
+    showConfirmDialogBox = ( transaction ) => {
+        this.setState({showConfirmDialog: true, transactionToDelete: transaction});
     }
 
+    delete = () => {
+        this.service.del(this.state.transactionToDelete.id)
+            .then(res => {
+                const transactions = this.state.transactions;
+                const indexToRemove = transactions.indexOf(this.state.transactionToDelete);
+                transactions.splice(indexToRemove, 1);
+                this.setState({transactions: transactions, showConfirmDialog: false} );
+                messages.successMessage("Transaction removed");
+            }).catch( e => {
+                messages.errorMessage('Error while deleting transaction:');
+            });
+    }
+
+    cancelDelete = () => {
+        this.setState({showConfirmDialog: false, transactionToDelete: {}});
+    }
+
+    setInsertInform = () => {
+        this.props.history.push('/register-transactions');
+    }
 
     render() {
         const listOfMonths = this.service.getMonthList();
         const listOfTypes = this.service.getTypeList();
+
+        const confirmDialogButtons = (
+            <div>
+                <Button label="Yes" icon="pi pi-check" onClick={this.delete} />
+                <Button label="Cancel" icon="pi pi-times" onClick={this.cancelDelete} />
+            </div>
+        );
 
         return (
             <Card title="List of Transactions">
@@ -97,7 +130,7 @@ class SearchTransactions extends React.Component {
                                     className="form-control" list={listOfTypes} />
                             </FormGroup>
                             <button type="button" onClick={this.select} className="btn btn-success">Search</button>
-                            <button type="button" className="btn btn-danger">Add</button>
+                            <button type="button" className="btn btn-danger" onClick={this.setInsertInform}>Add</button>
                         </div>
                     </div>
                 </div>
@@ -106,10 +139,20 @@ class SearchTransactions extends React.Component {
                     <div className="col-md-12">
                         <div className="bs-component">
                             <TransactionsTable transactions={this.state.transactions}
-                                deleteAction={this.delete}
+                                deleteAction={this.showConfirmDialogBox}
                                 editAction={this.edit}/>
                         </div>
                     </div>
+                </div>
+                <div>
+                <Dialog header="Confirm Removal"
+                        visible={this.state.showConfirmDialog}
+                        style={{width: '40vw'}}
+                        footer={confirmDialogButtons}
+                        modal={true}
+                        onHide={() => this.setState({showConfirmDialog: false})}>
+                        Confirm removal of this Transaction?
+                    </Dialog>
                 </div>
             </Card>
         );

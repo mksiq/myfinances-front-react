@@ -43,7 +43,7 @@ class Home extends React.Component {
                         href="#/user-signup"
                         role="button"><i className="fa fa-users"></i> Register User</a>
                     <a className="btn btn-danger btn-lg"
-                        href="https://bootswatch.com/superhero/#"
+                        href="#/register-transactions"
                         role="button"><i className="fa fa-users"></i> Register Transaction</a>
                 </p>
             </div>
