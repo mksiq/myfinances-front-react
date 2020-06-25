@@ -15,7 +15,7 @@ function Routes(){
                 <Route path="/user-signup" component={UserSignUp} />
                 <Route path="/home" component={Home} />
                 <Route path="/search-transactions" component={SeachTransaction}/>
-                <Route path="/register-transactions/:id" component={RegisterTransaction}  />
+                <Route path="/register-transactions/:id?" component={RegisterTransaction}  />
             </Switch>
         </HashRouter>
     );

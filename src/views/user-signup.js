@@ -20,43 +20,30 @@ class UserSignUp extends React.Component {
         this.service = new UserService();
     }
 
-    validate(){
-        const messages = [];
-        if(!this.state.name){
-            messages.push('You need to type a name.');
-        }
-        if(!this.state.email){
-            messages.push('You need to type an email.');
-        } else if (!this.state.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)){
-            messages.push('You need to type a valid email.');
-        }
-        if(!this.state.password){
-            messages.push('You need to type an password.');
-        }
-        if(!this.state.confirmPassword){
-            messages.push('You need to confirm your password.');
-        }
-        if(this.state.password !== this.state.confirmPassword ){
-            messages.push('Your password does not match.');
-        }
 
-        return messages;
-    }
 
     signup = () => {
-        const messages = this.validate();
-        if(messages && messages.length > 0){
-            messages.forEach( (msg, index) => {
-                errorMessage(msg)
-            });
-            return false;
-        }
+
+        const {name,
+            email,
+            password,
+            confirmPassword } = this.state;
+
         const user = {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password
+            name,
+            email,
+            password,
+            confirmPassword
         }
 
+        try {
+            this.service.validate(user);
+        } catch (error) {
+            const msgs = error.msgs;
+            msgs.forEach(msg => errorMessage(msg));
+            return false;
+        }
+        
         this.service.insert(user)
             .then( res  => {
                 successMessage('User registered. Login to enter');

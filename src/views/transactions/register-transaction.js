@@ -16,7 +16,8 @@ class RegisterTransaction extends React.Component {
         year: "",
         type: "",
         status: "",
-        user: null
+        user: null,
+        updating: false
     }
 
     constructor() {
@@ -27,9 +28,10 @@ class RegisterTransaction extends React.Component {
     componentDidMount(){
         const params = this.props.match.params;
         if(params.id){
+
             this.service.getById(params.id)
                 .then(response => {
-                    this.setState( { ...response.data} )
+                    this.setState( { ...response.data, updating: true} )
                 })
                 .catch(error => {
                     messages.errorMessage(error.response.data);
@@ -59,6 +61,16 @@ class RegisterTransaction extends React.Component {
             type,
             userId: loggedUser.id
         }
+
+        try{
+            this.service.validate(transaction);
+        }catch(error){
+            const msgs = error.msgs;
+            msgs.forEach(msg => messages.errorMessage(msg));
+            return false;
+        }
+
+
 
         this.service
             .insert(transaction).then(response => {
@@ -105,7 +117,7 @@ class RegisterTransaction extends React.Component {
         const months = this.service.getMonthList();
 
         return (
-            <Card title="Register Transaction">
+            <Card title={this.state.updating ? "Transaction Update" : "New Transaction"}>
                 <div className="row">
                     <div className="col-md-12">
                         <FromGroup id="inputDescription" label="Description: *">
@@ -163,8 +175,15 @@ class RegisterTransaction extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-md-6">
-                        <button className="btn btn-success" onClick={this.submit}>Save</button>
-                        <button className="btn btn-primary" onClick={this.update}>Update</button>
+                        {
+                            this.state.updating ?
+                            (
+                                <button className="btn btn-primary" onClick={this.update}>Update</button>
+
+                            ) : (
+                                <button className="btn btn-success" onClick={this.submit}>Save</button>
+                            )
+                        }
                         <button className="btn btn-danger" onClick={e => this.props.history.push('/search-transactions')}>Cancel</button>
                     </div>
                 </div>

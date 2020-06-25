@@ -1,4 +1,6 @@
 import ApiService from '../apiservice'
+import ValidationError from '../exception/validation-error'
+
 
 export default class TransactionService extends ApiService {
 
@@ -36,13 +38,38 @@ export default class TransactionService extends ApiService {
        return this.get(`/${id}`);
     }
 
+    validate(transaction){
+        const errors = [];
+
+        if(!transaction.year){
+            errors.push("Give it an year");
+        }
+        if(!transaction.month){
+            errors.push("Give it a month");
+        }
+        if(!transaction.type){
+            errors.push("Give it a type");
+        }
+        if(!transaction.value){
+            errors.push("Give it a value");
+        }
+        if(!transaction.description){
+            errors.push("Give it a description");
+        }
+
+
+
+        if(errors && errors.length > 0){
+            throw new ValidationError(errors);
+        }
+    }
+
     insert(transaction){
         return this.post('/',transaction)
     }
 
     update(transaction){
-
-        return this.put(`/${transaction.id}`,transaction)
+        return this.put(`/${transaction.id}`,transaction);
     }
 
     select(transactionFilter) {
