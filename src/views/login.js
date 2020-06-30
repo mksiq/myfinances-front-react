@@ -60,8 +60,8 @@ class Login extends React.Component {
                                         id="inputPassword1"
                                         placeholder="Password" />
                                 </FormGroup>
-                                <button onClick={this.login} className="btn btn-success">Login</button>
-                                <button onClick={this.prepareSignup} className="btn btn-danger">Sign Up</button>
+                                <button onClick={this.login} className="btn btn-success" ><i className="pi pi-sign-in"></i> Login</button>
+                                <button onClick={this.prepareSignup} className="btn btn-danger" ><i className="pi pi-plus"></i> Sign Up</button>
                             </fieldset>
                         </Card>
                     </div>

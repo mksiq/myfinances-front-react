@@ -92,8 +92,8 @@ class UserSignUp extends React.Component {
                                     name="confirmPassword"
                                     onChange={e => this.setState({ confirmPassword: e.target.value })} />
                             </FormGroup>
-                            <button onClick={this.signup} type="button" className="btn btn-success">Sign Up!</button>
-                            <button onClick={this.cancel} type="button" className="btn btn-danger">Cancel</button>
+                            <button onClick={this.signup} type="button" className="btn btn-success" ><i className="pi pi-save"></i> Sign Up!</button>
+                            <button onClick={this.cancel} type="button" className="btn btn-danger"><i className="pi pi-times"></i>Cancel</button>
                         </div>
                     </div>
                 </div>

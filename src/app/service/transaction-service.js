@@ -38,6 +38,11 @@ export default class TransactionService extends ApiService {
        return this.get(`/${id}`);
     }
 
+    updateStatus(id, status){
+
+        return this.put(`/${id}/update-status` ,{status})
+    }
+
     validate(transaction){
         const errors = [];
 

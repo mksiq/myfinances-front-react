@@ -11,10 +11,16 @@ export default props => {
                 <td>{transaction.month}</td>
                 <td>{transaction.status}</td>
                 <td>
-                    <button type="button" className="btn btn-primary"
-                        onClick={ e => props.editAction(transaction.id )}>Edit</button>
-                    <button type="button" className="btn btn-danger"
-                        onClick={ e => props.deleteAction(transaction)}>Remove</button>
+                    <button type="button" className="btn btn-success" title="Approve"
+                        disable={ transaction.status !== "PENDING"}
+                        onClick={ e => props.updateStatus(transaction, 'APPROVED')}><i className="pi pi-check"></i></button>
+                    <button type="button" className="btn btn-warning" title="Cancel"
+                        disable={ transaction.status !== "PENDING"}
+                        onClick={ e => props.updateStatus(transaction, 'CANCELED')}><i className="pi pi-times"></i></button>
+                    <button type="button" className="btn btn-primary" title="Edit"
+                        onClick={ e => props.editAction(transaction.id )}><i className="pi pi-pencil"></i></button>
+                    <button type="button" className="btn btn-danger" title="Remove"
+                        onClick={ e => props.deleteAction(transaction)}><i className="pi pi-trash"></i></button>
                 </td>
             </tr>
         );

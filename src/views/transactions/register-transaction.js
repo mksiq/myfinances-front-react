@@ -178,13 +178,15 @@ class RegisterTransaction extends React.Component {
                         {
                             this.state.updating ?
                             (
-                                <button className="btn btn-primary" onClick={this.update}>Update</button>
+                                <button className="btn btn-primary"
+                                    onClick={this.update}><i className="pi pi-refresh"> </i> Update</button>
 
                             ) : (
-                                <button className="btn btn-success" onClick={this.submit}>Save</button>
+                                <button className="btn btn-success"
+                                    onClick={this.submit}><i className="pi pi-save"> </i> Save</button>
                             )
                         }
-                        <button className="btn btn-danger" onClick={e => this.props.history.push('/search-transactions')}>Cancel</button>
+                        <button className="btn btn-danger" onClick={e => this.props.history.push('/search-transactions')}><i className="pi pi-times"> </i> Cancel</button>
                     </div>
                 </div>
             </Card>

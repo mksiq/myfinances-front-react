@@ -50,6 +50,9 @@ class SearchTransactions extends React.Component {
 
         this.service.select(transactionFilter)
             .then(response => {
+                if(response.data.length < 1 ){
+                    messages.alertMessage("No transaction found.");
+                }
                 this.setState({ transactions: response.data });
             }).catch(e => {
                 console.log(e);
@@ -83,6 +86,22 @@ class SearchTransactions extends React.Component {
 
     setInsertInform = () => {
         this.props.history.push('/register-transactions');
+    }
+
+    updateStatus = (transaction, status) => {
+        this.service.updateStatus(transaction.id, status)
+            .then( response => {
+                const transactions = this.state.transactions;
+
+                const index = transactions.indexOf(transaction);
+
+                if(index !== -1){
+                    transaction['status'] = status;
+                    transactions[index] = transaction;
+                    this.setState({transaction});
+                }
+                messages.successMessage("Status updated.");
+            })
     }
 
     render() {
@@ -129,8 +148,9 @@ class SearchTransactions extends React.Component {
                                     onChange={event => this.setState({ type: event.target.value })}
                                     className="form-control" list={listOfTypes} />
                             </FormGroup>
-                            <button type="button" onClick={this.select} className="btn btn-success">Search</button>
-                            <button type="button" className="btn btn-danger" onClick={this.setInsertInform}>Add</button>
+                            <button type="button" onClick={this.select}
+                                className="btn btn-success"><i className="pi pi-search"> </i>  Search</button>
+                            <button type="button" className="btn btn-danger" onClick={this.setInsertInform}><i className="pi pi-plus"> </i>  Add</button>
                         </div>
                     </div>
                 </div>
@@ -140,7 +160,8 @@ class SearchTransactions extends React.Component {
                         <div className="bs-component">
                             <TransactionsTable transactions={this.state.transactions}
                                 deleteAction={this.showConfirmDialogBox}
-                                editAction={this.edit}/>
+                                editAction={this.edit}
+                                updateStatus={this.updateStatus}/>
                         </div>
                     </div>
                 </div>
