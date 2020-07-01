@@ -179,7 +179,7 @@ class RegisterTransaction extends React.Component {
                             this.state.updating ?
                             (
                                 <button className="btn btn-primary"
-                                    onClick={this.update}><i className="pi pi-refresh"> </i> Update</button>
+                                    onClick={this.update}><i className="pi pi-refresh"></i> Update</button>
 
                             ) : (
                                 <button className="btn btn-success"

@@ -5,15 +5,14 @@ import { withRouter } from 'react-router-dom'
 import UserService from '../app/service/user-service'
 import LocalStorageService from '../app/service/localstorage-service'
 import { errorMessage } from '../components/toastr'
-
+import { AuthContext } from '../main/authenticationProvider'
 
 
 class Login extends React.Component {
     
     state = {
         email: '',
-        password: '',
-        errorMessage: null
+        password: ''
     }
 
     constructor(){
@@ -26,8 +25,8 @@ class Login extends React.Component {
             email : this.state.email,
             password : this.state.password
         }).then( response => {
-            LocalStorageService.addItem('_logged_user',response.data);
-            this.props.history.push('/home')
+            this.context.startSession(response.data);
+            this.props.history.push('/home');
         }).catch( e => {
            errorMessage(e.response.data);
         });
@@ -70,5 +69,7 @@ class Login extends React.Component {
         );
     }
 }
+
+Login.contextType = AuthContext;
 
 export default withRouter(Login) 

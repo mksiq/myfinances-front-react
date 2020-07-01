@@ -1,6 +1,7 @@
 import React from 'react';
 import Routes from './routes'
 import Navbar from '../components/navbar'
+import AuthenticationProvider from './authenticationProvider'
 
 import 'toastr/build/toastr.css'
 import 'toastr/build/toastr.min.css'
@@ -17,6 +18,7 @@ import 'primeicons/primeicons.css'
 class App extends React.Component {
   render() {
     return (
+      <AuthenticationProvider>
       <>
       <div>
         <Navbar />
@@ -25,6 +27,7 @@ class App extends React.Component {
         </div>
       </div>
       </>
+      </AuthenticationProvider>
     );
   }
 }
